@@ -22,9 +22,6 @@ jobs:
 
       - run: npm install --global vercel@latest
 
-      - name: DEBUG whoami
-        run: vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
-
       - name: Pull Vercel environment
         run: vercel pull --yes --environment=${{ github.event.workflow_run.event == 'pull_request' && 'preview' || 'production' }} --token=${{ secrets.VERCEL_TOKEN }}
 
