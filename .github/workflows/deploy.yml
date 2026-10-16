@@ -1,16 +1,25 @@
 name: Deploy
 
-# Roda depois que o workflow "CI" (ci.yml) conclui, e só se tiver passado.
-# github.event.workflow_run.pull_requests só vem populado pra PRs do mesmo
-# repositório (não funciona pra PRs de forks).
+# Produção: somente pushes na master deste repositório com CI aprovado.
 on:
   workflow_run:
     workflows: ["CI"]
     types: [completed]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: vercel-production
+  cancel-in-progress: false
+
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'master' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
     runs-on: ubuntu-latest
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
