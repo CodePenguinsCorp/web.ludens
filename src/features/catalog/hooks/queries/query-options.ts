@@ -77,6 +77,7 @@ export const catalogQueryOptions = {
       catalogQueryKeys.showDetail(showId),
     queryFn: () =>
       catalogService.fetchShowById(showId),
+    refetchInterval: 15_000,
   }),
 
 sessionDetail: (sessionId: string) =>

@@ -26,6 +26,15 @@ export function useShowDetail(showId: string) {
   );
 }
 
+export function useSessionDateOptions(showId: string, enabled: boolean) {
+  return useQuery({
+    ...catalogQueryOptions.showDetail(showId),
+    enabled,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+  });
+}
+
 export function useSessionDetail(sessionId: string) {
   return useQuery(
     catalogQueryOptions.sessionDetail(sessionId),

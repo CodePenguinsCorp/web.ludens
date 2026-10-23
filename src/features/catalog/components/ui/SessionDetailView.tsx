@@ -1,7 +1,8 @@
 import { CalendarDays, MapPin, Ticket } from 'lucide-react';
 
 import { Badge } from '@components/ui/badge';
-import { Button } from '@components/ui/button';
+import { TicketPicker } from '@booking/components/TicketPicker';
+import { SessionDatePicker } from '@catalog/components/SessionDatePicker';
 import { Card, CardContent } from '@components/ui/card';
 import { Separator } from '@components/ui/separator';
 
@@ -41,10 +42,6 @@ const STATUS_BADGE_VARIANT: Record<
 export function SessionDetailView({
   session,
 }: SessionDetailViewProps) {
-  const canReserve =
-    session.status === 'on_sale' &&
-    session.available_count > 0;
-
   return (
     <main className="mx-auto max-w-2xl px-4 py-8">
       <Card>
@@ -63,6 +60,7 @@ export function SessionDetailView({
               <MapPin className="size-4" />
               {session.venue}
             </p>
+            <SessionDatePicker key={session.id} session={session} />
           </header>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -99,18 +97,7 @@ export function SessionDetailView({
             ))}
           </ul>
 
-          {/* Slot do TicketPicker (booking-reservation) —
-              esta fatia só exibe disponibilidade;
-              a reserva é outra feature. */}
-          <Button
-            type="button"
-            disabled={!canReserve}
-            className="min-h-11 w-full"
-          >
-            {canReserve
-              ? 'Reservar'
-              : STATUS_LABEL[session.status]}
-          </Button>
+          <TicketPicker key={session.id} session={session} />
         </CardContent>
       </Card>
     </main>

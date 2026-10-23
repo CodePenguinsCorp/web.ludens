@@ -119,7 +119,7 @@ export async function fetcher<T>(
     }
 
     if (typeof window !== 'undefined') {
-      window.location.assign('/login');
+      window.location.assign(`/login?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`);
     }
   }
 

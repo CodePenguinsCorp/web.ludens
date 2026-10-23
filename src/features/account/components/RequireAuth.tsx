@@ -19,7 +19,7 @@ export function RequireAuth({ children }: RequireAuthProps) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
+      router.replace(`/login?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`);
     }
   }, [isAuthenticated, isLoading, router]);
 

@@ -7,6 +7,7 @@ import { ThemeProvider } from '@components/ThemeProvider';
 import { ThemeToggle } from '@components/ThemeToggle';
 
 import { AdminNavButton } from '@catalog';
+import { ReservationsNavButton } from '@booking/components/ReservationsNavButton';
 
 import { Providers } from './providers';
 
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
             <div className="fixed right-4 top-4 z-50 flex items-center gap-2">
               <AdminNavButton />
+              <ReservationsNavButton />
               <ThemeToggle />
             </div>
           </Providers>

@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { RegisterForm } from '@account/components/forms';
 import { useRegisterForm } from '@account/hooks/forms';
 import { useAuthMutations } from '@account/hooks/mutations';
+import { safeReturnTo } from '@account/lib/return-to';
 
-export function RegisterFormContainer() {
+export function RegisterFormContainer({ returnTo = '/' }: { returnTo?: string }) {
   const router = useRouter();
 
   const form = useRegisterForm();
@@ -16,7 +17,7 @@ export function RegisterFormContainer() {
     try {
       await registerMutation.mutateAsync(data);
 
-      router.push('/');
+      router.replace(safeReturnTo(returnTo));
     } catch {
       // O toast de erro já é tratado na mutation.
     }

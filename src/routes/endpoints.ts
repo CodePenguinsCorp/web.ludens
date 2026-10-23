@@ -6,6 +6,12 @@ const AUTH_BASE = `${IDENTITY_BASE}/authentication`;
 const CATALOG_BASE = `${API_BASE}/catalog`;
 
 export const endpoints = {
+  booking: {
+    reservations: `${API_BASE}/booking/reservations`,
+    reservationById: (id: string) => `${API_BASE}/booking/reservations/${id}`,
+    reservationCancel: (id: string) => `${API_BASE}/booking/reservations/${id}/cancel`,
+    rebookingOptions: (id: string) => `${API_BASE}/booking/reservations/${id}/rebooking-options`,
+  },
   auth: {
     login: `${AUTH_BASE}/login`,
     refresh: `${AUTH_BASE}/refresh`,
