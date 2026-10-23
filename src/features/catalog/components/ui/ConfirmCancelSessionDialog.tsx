@@ -50,7 +50,7 @@ export function ConfirmCancelSessionDialog({
 
           <AlertDialogDescription>
             {ticketsSold > 0
-              ? `Esta sessão já vendeu ${ticketsSold} ingresso(s). Ao cancelar, todos os compradores entram na fila de reembolso conforme a política vigente, e as reservas em aberto são liberadas. A ação não pode ser desfeita.`
+              ? `Esta sessão já vendeu ${ticketsSold} ingresso(s). Ao cancelar, os pedidos pagos são cancelados, os ingressos invalidados, os compradores avisados por e-mail e as reservas em aberto liberadas. O reembolso é apenas simulado: nenhum valor real é devolvido. A ação não pode ser desfeita.`
               : 'A sessão sai da vitrine imediatamente. A ação não pode ser desfeita.'}
           </AlertDialogDescription>
         </AlertDialogHeader>

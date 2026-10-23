@@ -45,9 +45,10 @@ const OPTIONS: HubOption[] = [
     icon: 'seats',
   },
   {
-    title: 'Vendas',
+    href: '/admin/pedidos',
+    title: 'Pedidos e cancelamentos',
     description:
-      'Acompanhamento de ingressos vendidos e repasses. Depende do módulo de pagamento no backend.',
+      'Acompanhe pedidos simulados, cancelamentos e valide ingressos no check-in.',
     icon: 'sales',
   },
 ];
