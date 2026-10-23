@@ -55,5 +55,9 @@ export const endpoints = {
     orders: `${BOOKING_BASE}/orders`,
     order: (id: string) => `${BOOKING_BASE}/orders/${id}`,
     simulatePayment: (id: string) => `${BOOKING_BASE}/orders/${id}/simulate`,
+    cancellationPreview: (id: string) => `${BOOKING_BASE}/orders/${id}/cancellation-preview`,
+    cancelOrder: (id: string) => `${BOOKING_BASE}/orders/${id}/cancel`,
+    adminOrders: `${BOOKING_BASE}/admin/orders`,
+    checkIn: `${BOOKING_BASE}/tickets/check-in`,
   },
 } as const;

@@ -211,7 +211,7 @@ export function useAdminCatalogMutations() {
       void invalidate();
 
       toast.success(
-        'Sessão cancelada. Os compradores entrarão na fila de reembolso.',
+        'Sessão cancelada. Pedidos e ingressos foram cancelados e os compradores notificados (reembolso simulado).',
       );
     },
 
@@ -236,7 +236,7 @@ export function useAdminCatalogMutations() {
     onError: (error) => {
       if (apiErrorStatus(error) === 409) {
         toast.error(
-          'Esta sessão já vendeu ingressos. Cancele a sessão em vez de excluir — os compradores serão reembolsados.',
+          'Esta sessão já vendeu ingressos. Cancele a sessão em vez de excluir — os pedidos serão cancelados (reembolso simulado).',
         );
         return;
       }
