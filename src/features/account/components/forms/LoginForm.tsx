@@ -20,9 +20,10 @@ type LoginFormProps = {
   form: UseFormReturn<LoginRequest>;
   onSubmit: () => void;
   isPending: boolean;
+  returnTo?: string;
 };
 
-export function LoginForm({ form, onSubmit, isPending }: LoginFormProps) {
+export function LoginForm({ form, onSubmit, isPending, returnTo = '/' }: LoginFormProps) {
   return (
     <Form {...form}>
       <form className="flex flex-col gap-4" onSubmit={onSubmit}>
@@ -74,6 +75,9 @@ export function LoginForm({ form, onSubmit, isPending }: LoginFormProps) {
           className="self-center text-sm text-primary underline-offset-4 hover:underline"
         >
           Esqueci minha senha
+        </Link>
+        <Link href={`/registro?returnTo=${encodeURIComponent(returnTo)}`} className="self-center text-sm underline">
+          Criar conta
         </Link>
       </form>
     </Form>

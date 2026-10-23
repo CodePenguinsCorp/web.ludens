@@ -43,16 +43,29 @@ da feature) trocam pra escuro.
 - `/registro`
 - `/recuperar-senha`
 - `/redefinir-senha`
+- `/minha-conta` (protegida): perfil, senha, troca de e-mail e exclusão
+- `/minhas-reservas` (protegida): informa que reservas ainda não estão disponíveis
+- `/confirmar-troca-de-email?token=...` (pública, confirmação explícita)
+- `/confirmar-exclusao-de-conta?token=...` (pública, confirmação explícita)
 
 ## Testes
 
 `schemas/auth.schema.test.ts`, `services/auth.service.test.ts` e
 `src/lib/fetcher.test.ts` (Jest — `npm run test`). Cobrem parse/rejeição de
 payload, URL/método/shape de cada chamada e o fluxo de refresh em 401.
-Fluxos de UI (Playwright) ainda não entraram — ver
-`team.ludens/skills/frontend-architecture/references/13-testing.md`.
+Os testes de componentes cobrem perfil, senha, solicitação e confirmação,
+erros de link e preservação do destino. `npm run build` seguido de
+`npm run test:e2e` executa os testes Playwright com respostas controladas
+da API, incluindo celular e teclado. Localmente requer Chrome instalado;
+o CI instala Chromium.
 
 ## Observação
 
-A integração depende da API de autenticação disponível através de
-`NEXT_PUBLIC_API_URL` (ver `.env.example` na raiz do repo).
+A integração usa `NEXT_PUBLIC_API_URL` no modo direto ou base relativa no
+proxy configurado por `API_PROXY_URL` (ver `.env.example` na raiz).
+
+Logout e alteração de senha encerram todas as sessões. A exclusão mantém
+a identidade e os vínculos comerciais; encerra o acesso, sem cancelar
+compras nem solicitar reembolso. A política é exibida antes da solicitação
+e da confirmação. Detalhes e contratos estão na
+[documentação da conta do comprador](https://github.com/CodePenguinsCorp/docs.ludens/blob/feat/buyer-account-management/specs/identity-user-management/buyer-account.md).

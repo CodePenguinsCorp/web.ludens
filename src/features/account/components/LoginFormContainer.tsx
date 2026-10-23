@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LoginForm } from '@account/components/forms';
 import { useLoginForm } from '@account/hooks/forms';
 import { useAuthMutations } from '@account/hooks/mutations';
-import { safeReturnTo } from '@account/lib/return-to';
+import { safeReturnTo } from '@account/lib/navigation';
 
 export function LoginFormContainer({ returnTo = '/' }: { returnTo?: string }) {
   const router = useRouter();
@@ -23,5 +23,5 @@ export function LoginFormContainer({ returnTo = '/' }: { returnTo?: string }) {
     }
   });
 
-  return <LoginForm form={form} onSubmit={onSubmit} isPending={loginMutation.isPending} />;
+  return <LoginForm form={form} onSubmit={onSubmit} isPending={loginMutation.isPending} returnTo={safeReturnTo(returnTo)} />;
 }

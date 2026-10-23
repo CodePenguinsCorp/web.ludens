@@ -23,6 +23,9 @@ export const endpoints = {
 
   users: {
     register: `${IDENTITY_BASE}/users`,
+    profile: `${IDENTITY_BASE}/users`,
+    emailChange: `${IDENTITY_BASE}/users/email/change`,
+    deletion: `${IDENTITY_BASE}/users/deletion`,
     list: `${IDENTITY_BASE}/users`,
     byId: (id: string) => `${IDENTITY_BASE}/users/${id}`,
   },

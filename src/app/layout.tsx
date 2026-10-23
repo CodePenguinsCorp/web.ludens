@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { Suspense } from 'react';
 import { Geist } from 'next/font/google';
 
 import { cn } from '@web/lib/utils';
 import { ThemeProvider } from '@components/ThemeProvider';
-import { ThemeToggle } from '@components/ThemeToggle';
-
-import { AdminNavButton } from '@catalog';
-import { ReservationsNavButton } from '@booking/components/ReservationsNavButton';
+import { AccountNavigation } from '@account/components/AccountNavigation';
 
 import { Providers } from './providers';
 
@@ -36,13 +34,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           disableTransitionOnChange
         >
           <Providers>
-            {children}
-
-            <div className="fixed right-4 top-4 z-50 flex items-center gap-2">
-              <AdminNavButton />
-              <ReservationsNavButton />
-              <ThemeToggle />
-            </div>
+            <Suspense fallback={<header className="border-b p-4" aria-busy="true">Ludens</header>}>
+              <AccountNavigation />
+            </Suspense>
+            <div id="conteudo" tabIndex={-1}>{children}</div>
           </Providers>
         </ThemeProvider>
       </body>

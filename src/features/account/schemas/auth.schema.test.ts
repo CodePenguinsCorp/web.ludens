@@ -67,6 +67,13 @@ describe('loginSchema', () => {
 });
 
 describe('changePasswordSchema', () => {
+  it('limita a senha por bytes UTF-8, inclusive com caracteres acentuados', () => {
+    const parse = (password: string) => changePasswordSchema.safeParse({ current_password: 'old-password', new_password: password }).success;
+    expect(parse('a'.repeat(72))).toBe(true);
+    expect(parse('a'.repeat(73))).toBe(false);
+    expect(parse('é'.repeat(36))).toBe(true);
+    expect(parse('é'.repeat(37))).toBe(false);
+  });
   it('exige snake_case (current_password/new_password)', () => {
     const result = changePasswordSchema.safeParse({
       current_password: 'atual123',

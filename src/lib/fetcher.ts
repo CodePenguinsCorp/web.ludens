@@ -1,19 +1,38 @@
 import { endpoints } from '@web/routes/endpoints';
+import { loginUrl } from '@account/lib/navigation';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 let accessToken: string | null = null;
+let sessionGeneration = 0;
+let pendingRefresh: { generation: number; promise: Promise<string | null> } | null = null;
+const tokenListeners = new Set<() => void>();
+
+export function subscribeAccessToken(listener: () => void) {
+  tokenListeners.add(listener);
+  return () => { tokenListeners.delete(listener); };
+}
 
 export function getAccessToken() {
   return accessToken;
 }
 
-export function setAccessToken(token: string | null) {
+export function getSessionGeneration() {
+  return sessionGeneration;
+}
+
+function publishToken(token: string | null) {
   accessToken = token;
+  tokenListeners.forEach((listener) => listener());
+}
+
+export function setAccessToken(token: string | null) {
+  sessionGeneration++;
+  publishToken(token);
 }
 
 export function clearAccessToken() {
-  accessToken = null;
+  setAccessToken(null);
 }
 
 type FetcherOptions = RequestInit & {
@@ -40,6 +59,7 @@ export class ApiError extends Error {
 }
 
 async function refreshAccessToken(): Promise<string | null> {
+  const generation = sessionGeneration;
   try {
     const response = await fetch(
       `${API_BASE_URL}${endpoints.auth.refresh}`,
@@ -50,25 +70,37 @@ async function refreshAccessToken(): Promise<string | null> {
     );
 
     if (!response.ok) {
-      clearAccessToken();
+      if (generation === sessionGeneration) publishToken(null);
       return null;
     }
 
     const data = (await response.json()) as TokenResponse;
 
-    setAccessToken(data.access_token);
+    if (generation !== sessionGeneration) return null;
+
+    publishToken(data.access_token);
 
     return data.access_token;
   } catch {
-    clearAccessToken();
+    if (generation === sessionGeneration) publishToken(null);
     return null;
   }
+}
+
+function refreshAccessTokenOnce(): Promise<string | null> {
+  if (pendingRefresh?.generation === sessionGeneration) return pendingRefresh.promise;
+  const promise = refreshAccessToken().finally(() => {
+    if (pendingRefresh?.promise === promise) pendingRefresh = null;
+  });
+  pendingRefresh = { generation: sessionGeneration, promise };
+  return promise;
 }
 
 export async function fetcher<T>(
   path: string,
   options: FetcherOptions = {},
 ): Promise<T> {
+  const generation = sessionGeneration;
   const {
     skipAuth = false,
     skipRefresh = false,
@@ -101,7 +133,10 @@ export async function fetcher<T>(
     !skipRefresh &&
     path !== endpoints.auth.refresh
   ) {
-    const newAccessToken = await refreshAccessToken();
+    if (generation !== sessionGeneration) return handleResponse<T>(response);
+    const newAccessToken = await refreshAccessTokenOnce();
+
+    if (generation !== sessionGeneration) return handleResponse<T>(response);
 
     if (newAccessToken) {
       requestHeaders.set(
@@ -119,7 +154,7 @@ export async function fetcher<T>(
     }
 
     if (typeof window !== 'undefined') {
-      window.location.assign(`/login?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+      window.location.assign(loginUrl(`${window.location.pathname}${window.location.search}${window.location.hash}`));
     }
   }
 
