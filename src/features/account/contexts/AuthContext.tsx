@@ -6,16 +6,21 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from 'react';
 
 import {
   clearAccessToken,
   getAccessToken,
+  getSessionGeneration,
   setAccessToken,
+  subscribeAccessToken,
 } from '@web/lib/fetcher';
 import { decodeAccessTokenSub } from '@web/lib/jwt';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { authService } from '@account/services/auth.service';
 
@@ -32,6 +37,8 @@ type AuthContextValue = {
   logout: () => Promise<void>;
   refreshSession: () => Promise<boolean>;
   setSession: (token: string) => Promise<void>;
+  clearSession: (destination?: string) => void;
+  sessionRedirect: string | null;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -43,36 +50,46 @@ type AuthProviderProps = {
 export function AuthProvider({
   children,
 }: AuthProviderProps) {
-  const [accessToken, setAccessTokenState] = useState<string | null>(
-    getAccessToken(),
-  );
-
+  const queryClient = useQueryClient();
+  const accessToken = useSyncExternalStore(subscribeAccessToken, getAccessToken, () => null);
+  const bootstrap = useRef<Promise<boolean> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [sessionRedirect, setSessionRedirect] = useState<string | null>(null);
 
   const userId = useMemo(
     () => (accessToken ? decodeAccessTokenSub(accessToken) : null),
     [accessToken],
   );
 
+  const clearSession = useCallback((destination?: string) => {
+    setSessionRedirect(destination ?? null);
+    clearAccessToken();
+    void queryClient.cancelQueries();
+    queryClient.clear();
+  }, [queryClient]);
+
   const setSession = useCallback(async (token: string) => {
+    setSessionRedirect(null);
+    queryClient.clear();
     setAccessToken(token);
-    setAccessTokenState(token);
-  }, []);
+  }, [queryClient]);
 
   const refreshSession = useCallback(async () => {
+    const generation = getSessionGeneration();
     try {
       const response = await authService.refresh();
+
+      if (getSessionGeneration() !== generation) return Boolean(getAccessToken());
 
       await setSession(response.access_token);
 
       return true;
     } catch {
-      clearAccessToken();
-      setAccessTokenState(null);
+      if (getSessionGeneration() === generation) clearSession();
 
-      return false;
+      return Boolean(getAccessToken());
     }
-  }, [setSession]);
+  }, [setSession, clearSession]);
 
   const login = useCallback(
     async (data: LoginRequest) => {
@@ -87,15 +104,15 @@ export function AuthProvider({
     try {
       await authService.logout();
     } finally {
-      clearAccessToken();
-      setAccessTokenState(null);
+      clearSession('/');
     }
-  }, []);
+  }, [clearSession]);
 
   useEffect(() => {
     async function bootstrapAuth() {
       try {
-        await refreshSession();
+        bootstrap.current ??= refreshSession();
+        await bootstrap.current;
       } finally {
         setIsLoading(false);
       }
@@ -114,6 +131,8 @@ export function AuthProvider({
       logout,
       refreshSession,
       setSession,
+      clearSession,
+      sessionRedirect,
     }),
     [
       userId,
@@ -123,6 +142,8 @@ export function AuthProvider({
       logout,
       refreshSession,
       setSession,
+      clearSession,
+      sessionRedirect,
     ],
   );
 

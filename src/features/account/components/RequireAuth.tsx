@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@account/contexts/AuthContext';
+import { loginUrl } from '@account/lib/navigation';
 
 type RequireAuthProps = {
   children: ReactNode;
@@ -15,16 +16,17 @@ export function RequireAuth({ children }: RequireAuthProps) {
   const {
     isAuthenticated,
     isLoading,
+    sessionRedirect,
   } = useAuth();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
+      router.replace(sessionRedirect ?? loginUrl(`${window.location.pathname}${window.location.search}${window.location.hash}`));
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, router, sessionRedirect]);
 
   if (isLoading) {
-    return null;
+    return <p className="p-6" role="status">Verificando sua sessão...</p>;
   }
 
   if (!isAuthenticated) {

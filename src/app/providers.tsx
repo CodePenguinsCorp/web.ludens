@@ -31,7 +31,7 @@ export function Providers({ children }: ProvidersProps) {
 
       <Toaster
         richColors
-        position="top-right"
+        position="bottom-right"
       />
     </QueryClientProvider>
   );
