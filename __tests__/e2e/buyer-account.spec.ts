@@ -35,6 +35,8 @@ async function buyerApi(page: Page) {
       body = [];
     } else if (path.endsWith('/shows')) {
       body = { items: [], total: 0, page: 1, size: 12 };
+    } else if (path === '/api/booking/reservations') {
+      body = { items: [], total: 0, page: 1, size: 12 };
     } else {
       status = 404;
       body = { detail: 'Recurso não encontrado.' };
@@ -93,7 +95,7 @@ test('celular: navegação não transborda, funciona por teclado e oferece reser
   await page.getByRole('link', { name: 'Minhas reservas' }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { name: 'Minhas reservas' })).toBeVisible();
-  await expect(page.getByText('As reservas de ingressos ainda não estão disponíveis nesta versão.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Nenhuma reserva encontrada.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Sair', exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('link', { name: 'Entrar', exact: true })).toBeVisible();
