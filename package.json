@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "jest",
+    "test:proxy": "node --test tests/api-proxy-check.mjs",
     "test:watch": "jest --watch"
   },
   "dependencies": {

@@ -20,5 +20,7 @@ jobs:
         run: npm run lint
       - name: Test
         run: npm run test
+      - name: Test API proxy
+        run: npm run test:proxy
       - name: Build
         run: npm run build
