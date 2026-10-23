@@ -4,6 +4,7 @@ const IDENTITY_BASE = `${API_BASE}/identity`;
 // pra não colidir com o prefixo de user_router (/identity/users).
 const AUTH_BASE = `${IDENTITY_BASE}/authentication`;
 const CATALOG_BASE = `${API_BASE}/catalog`;
+const BOOKING_BASE = `${API_BASE}/booking`;
 
 export const endpoints = {
   booking: {
@@ -48,5 +49,14 @@ export const endpoints = {
     sessionById: (id: string) => `${CATALOG_BASE}/sessions/${id}`,
     sessionCancel: (id: string) =>
       `${CATALOG_BASE}/sessions/${id}/cancel`,
+  },
+
+  booking: {
+    reservations: `${BOOKING_BASE}/reservations`,
+    reservation: (id: string) => `${BOOKING_BASE}/reservations/${id}`,
+    checkout: (reservationId: string) => `${BOOKING_BASE}/reservations/${reservationId}/checkout`,
+    orders: `${BOOKING_BASE}/orders`,
+    order: (id: string) => `${BOOKING_BASE}/orders/${id}`,
+    simulatePayment: (id: string) => `${BOOKING_BASE}/orders/${id}/simulate`,
   },
 } as const;
