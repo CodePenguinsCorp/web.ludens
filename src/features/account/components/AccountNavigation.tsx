@@ -56,6 +56,12 @@ export function AccountNavigation() {
             <Button variant="ghost" className="min-h-11" asChild>
               <Link href="/minhas-reservas" aria-current={pathname === '/minhas-reservas' ? 'page' : undefined}>Minhas reservas</Link>
             </Button>
+            <Button variant="ghost" className="min-h-11" asChild>
+              <Link href="/minhas-compras" aria-current={pathname.startsWith('/minhas-compras') ? 'page' : undefined}>Minhas compras</Link>
+            </Button>
+            <Button variant="ghost" className="min-h-11" asChild>
+              <Link href="/meus-ingressos" aria-current={pathname === '/meus-ingressos' ? 'page' : undefined}>Meus ingressos</Link>
+            </Button>
             {user?.is_admin ? <Button variant="outline" className="min-h-11" asChild><Link href="/admin">Painel administrativo</Link></Button> : null}
             <Button variant="outline" className="min-h-11" onClick={() => void signOut()} disabled={pending} aria-describedby="efeito-logout">
               {pending ? 'Saindo...' : 'Sair'}

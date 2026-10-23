@@ -4,14 +4,9 @@ const IDENTITY_BASE = `${API_BASE}/identity`;
 // pra não colidir com o prefixo de user_router (/identity/users).
 const AUTH_BASE = `${IDENTITY_BASE}/authentication`;
 const CATALOG_BASE = `${API_BASE}/catalog`;
+const BOOKING_BASE = `${API_BASE}/booking`;
 
 export const endpoints = {
-  booking: {
-    reservations: `${API_BASE}/booking/reservations`,
-    reservationById: (id: string) => `${API_BASE}/booking/reservations/${id}`,
-    reservationCancel: (id: string) => `${API_BASE}/booking/reservations/${id}/cancel`,
-    rebookingOptions: (id: string) => `${API_BASE}/booking/reservations/${id}/rebooking-options`,
-  },
   auth: {
     login: `${AUTH_BASE}/login`,
     refresh: `${AUTH_BASE}/refresh`,
@@ -48,5 +43,17 @@ export const endpoints = {
     sessionById: (id: string) => `${CATALOG_BASE}/sessions/${id}`,
     sessionCancel: (id: string) =>
       `${CATALOG_BASE}/sessions/${id}/cancel`,
+  },
+
+  booking: {
+    reservations: `${BOOKING_BASE}/reservations`,
+    reservationById: (id: string) => `${BOOKING_BASE}/reservations/${id}`,
+    reservationCancel: (id: string) => `${BOOKING_BASE}/reservations/${id}/cancel`,
+    rebookingOptions: (id: string) => `${BOOKING_BASE}/reservations/${id}/rebooking-options`,
+    reservation: (id: string) => `${BOOKING_BASE}/reservations/${id}`,
+    checkout: (reservationId: string) => `${BOOKING_BASE}/reservations/${reservationId}/checkout`,
+    orders: `${BOOKING_BASE}/orders`,
+    order: (id: string) => `${BOOKING_BASE}/orders/${id}`,
+    simulatePayment: (id: string) => `${BOOKING_BASE}/orders/${id}/simulate`,
   },
 } as const;

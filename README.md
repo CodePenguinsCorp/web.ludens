@@ -149,7 +149,6 @@ merge: `npm run lint` + `npm run test` + `npm run build` verdes + 1 aprovação.
 - [Specs das features (N1)](https://github.com/gcarvalhow/docs.ludens/tree/HEAD/specs) — contrato backend→frontend em `integration.md`
 - [Ambiente de desenvolvimento](https://github.com/gcarvalhow/docs.ludens/blob/HEAD/team/development.md)
 
-> **Status:** feature `account` (login, registro, recuperação/redefinição de
-> senha, sessão autenticada) implementada e integrada com o `api.ludens` real
-> — ver `src/features/account/README.md`. Demais features (`catalog`,
-> `booking`, `checkout`) entram por spec.
+> **Status:** conta, catálogo, reservas e compra demonstrativa estão integrados
+> com a API. Compras e códigos de ingresso ficam em `Minhas compras` e `Meus
+> ingressos`; a simulação não cobra nem integra um gateway bancário.
