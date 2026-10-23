@@ -9,9 +9,40 @@ import type {
   ResetPasswordRequest,
   TokenResponse,
   User,
+  UpdateProfileRequest,
+  EmailChangeRequest,
+  MessageResponse,
 } from '@account/server/types/auth.types';
 
 export const authService = {
+  updateProfile(data: UpdateProfileRequest) {
+    return fetcher<User>(endpoints.users.profile, {
+      method: 'PATCH', body: JSON.stringify(data),
+    });
+  },
+
+  requestEmailChange(data: EmailChangeRequest) {
+    return fetcher<MessageResponse>(endpoints.users.emailChange, {
+      method: 'POST', body: JSON.stringify(data),
+    });
+  },
+
+  confirmEmailChange(token: string) {
+    return fetcher<void>(`${endpoints.users.emailChange}?token=${encodeURIComponent(token)}`, {
+      method: 'PATCH', skipAuth: true,
+    });
+  },
+
+  requestAccountDeletion() {
+    return fetcher<MessageResponse>(endpoints.users.deletion, { method: 'POST' });
+  },
+
+  confirmAccountDeletion(token: string) {
+    return fetcher<void>(`${endpoints.users.deletion}?token=${encodeURIComponent(token)}`, {
+      method: 'DELETE', skipAuth: true,
+    });
+  },
+
   register(data: RegisterRequest) {
     return fetcher<TokenResponse>(endpoints.users.register, {
       method: 'POST',

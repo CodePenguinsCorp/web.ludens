@@ -24,3 +24,7 @@ jobs:
         run: npm run test:proxy
       - name: Build
         run: npm run build
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+      - name: Test buyer account in browser
+        run: npm run test:e2e
