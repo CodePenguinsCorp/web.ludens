@@ -7,12 +7,6 @@ const CATALOG_BASE = `${API_BASE}/catalog`;
 const BOOKING_BASE = `${API_BASE}/booking`;
 
 export const endpoints = {
-  booking: {
-    reservations: `${API_BASE}/booking/reservations`,
-    reservationById: (id: string) => `${API_BASE}/booking/reservations/${id}`,
-    reservationCancel: (id: string) => `${API_BASE}/booking/reservations/${id}/cancel`,
-    rebookingOptions: (id: string) => `${API_BASE}/booking/reservations/${id}/rebooking-options`,
-  },
   auth: {
     login: `${AUTH_BASE}/login`,
     refresh: `${AUTH_BASE}/refresh`,
@@ -53,6 +47,9 @@ export const endpoints = {
 
   booking: {
     reservations: `${BOOKING_BASE}/reservations`,
+    reservationById: (id: string) => `${BOOKING_BASE}/reservations/${id}`,
+    reservationCancel: (id: string) => `${BOOKING_BASE}/reservations/${id}/cancel`,
+    rebookingOptions: (id: string) => `${BOOKING_BASE}/reservations/${id}/rebooking-options`,
     reservation: (id: string) => `${BOOKING_BASE}/reservations/${id}`,
     checkout: (reservationId: string) => `${BOOKING_BASE}/reservations/${reservationId}/checkout`,
     orders: `${BOOKING_BASE}/orders`,

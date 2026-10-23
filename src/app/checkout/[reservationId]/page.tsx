@@ -1,10 +1,10 @@
-import { ReservationDetail } from '@booking/components/ReservationDetail';
+import { CheckoutFlow } from '@booking/components/CheckoutFlow';
 
-export default async function ReservationPage({
+export default async function CheckoutPage({
   params,
 }: {
   params: Promise<{ reservationId: string }>;
 }) {
   const { reservationId } = await params;
-  return <ReservationDetail id={reservationId} />;
+  return <CheckoutFlow reservationId={reservationId} />;
 }
