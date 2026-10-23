@@ -21,7 +21,7 @@ const nextConfig = {
   skipTrailingSlashRedirect: Boolean(apiOrigin),
   async rewrites() {
     return apiOrigin ? [
-      { source: '/api/:path*/', destination: `${apiOrigin}/api/:path*/` },
+      { source: '/api/:path(.*/)', destination: `${apiOrigin}/api/:path` },
       { source: '/api/:path*', destination: `${apiOrigin}/api/:path*` },
     ] : [];
   },
